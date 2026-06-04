@@ -52,7 +52,7 @@ Diagram types: architecture · data-flow · integration/network · sequence/auth
 - (nothing actively building — paused on R1 verdict)
 
 ## Awaiting Loren review
-- **[R1]** Foundational proof: Ref-1 (cream "Any source of truth") + Ref-3 (blue "Partner→Okta") + Northwind rebrand on both. All 4 diagrams rendered to disk; gallery + Hub live on localhost:8848.
+- **[R1]** Foundational proof: Ref-1 (cream "Any source of truth") + Ref-3 (blue "Partner→Okta") + Northwind rebrand on both. All 4 diagrams rendered + deployed; gallery + Hub live at https://diagrams.bbase.ai.
   - **Gating gap (be transparent next turn):** headless Chrome screenshot was killed by the env on both attempts (exit 143 / auto-bg killed). Could not visually pre-gate vs the 5 refs. Surfaced this honestly in the Hub note; Loren's eyes are the gate this round.
   - When R1 lands: depending on verdict, either iterate fixes or proceed to remaining refs (devices / admin tree / Configure Users card) to complete the Okta pack v1.
 
@@ -64,9 +64,10 @@ Diagram types: architecture · data-flow · integration/network · sequence/auth
 
 ## Mechanics
 - Project root: `/Users/lorenpolster/Claude/Projects/bbai-diagrams`
-- Local review server: `python3 -m http.server 8848` (bg id `b3jjkb90y` this session) → `http://localhost:8848/`
-- Plan doc (Loren-facing): `Diagram_Engine_Plan.html`
-- Hub (Loren-facing): `review-hub.html` → http://localhost:8848/review-hub.html
-- Server bg id (this session): `bzx0hpcuc`
-- Gating tooling note: in-harness headless Chrome screenshots and MCP browser preview both fail in this env (SIGTERM / chrome-error). For now Loren visually reviews; future option = try Playwright via npx or computer-use screenshot of a foreground Chrome window.
+- Repo: `bbagent-01/diagrams` → https://github.com/bbagent-01/diagrams
+- **Live: https://diagrams.bbase.ai** (auto-deploys on push to main via GH Action → Cloudflare Pages project `diagrams`; raw subdomain `diagrams-akt.pages.dev`)
+- Hub (Loren-facing): `/index.html` → https://diagrams.bbase.ai/
+- Plan doc: `/Diagram_Engine_Plan.html` → https://diagrams.bbase.ai/Diagram_Engine_Plan.html
+- Gallery: `/gallery.html` → https://diagrams.bbase.ai/gallery.html
+- Gating tooling note: in-harness headless Chrome screenshots fail (SIGTERM). Future option = Playwright via npx, or visit the live URL from a separate gating environment.
 - Repo/deploy: not set up yet.
