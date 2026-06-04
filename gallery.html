@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagram Engine — Proof Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bb-bg: #FFFFFF;
+      --bb-bg-2: #F8F9FA;
+      --bb-bg-3: #F1F3F5;
+      --bb-ink: #1A1D21;
+      --bb-ink-2: #6B7280;
+      --bb-ink-3: #9CA3AF;
+      --bb-border: #E5E7EB;
+      --bb-accent: #2563EB;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bb-bg-2);
+      color: var(--bb-ink);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding: 48px 24px 80px;
+    }
+    .wrap { max-width: 1320px; margin: 0 auto; }
+
+    header.page { margin-bottom: 8px; }
+    h1 { font-size: 28px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
+    .sub { color: var(--bb-ink-2); font-size: 15px; max-width: 720px; line-height: 1.55; margin: 0; }
+    .sub code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      background: var(--bb-bg-3);
+      padding: 1px 6px;
+      border-radius: 6px;
+      color: var(--bb-ink);
+    }
+
+    .group { margin-top: 40px; }
+    .group__head {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+    .group__title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .group__title--okta { color: var(--bb-accent); }
+    .group__title--nw { color: #0F766E; }
+    .group__note { font-size: 13px; color: var(--bb-ink-3); }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 16px;
+    }
+    @media (max-width: 980px) { .row { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--bb-bg);
+      border: 1px solid var(--bb-border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .card__frame {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--bb-border);
+      overflow: hidden;
+      position: relative;
+    }
+    /* Scale the 900-wide diagram pages down to fit the card neatly.
+       Each diagram page is a full white stage; we shrink it so the
+       whole panel is visible without scrollbars. */
+    .card__frame iframe {
+      border: 0;
+      width: 1000px;
+      height: 1000px;
+      transform: scale(0.46);
+      transform-origin: top left;
+      position: absolute;
+      top: 0; left: 0;
+    }
+    .card__meta { padding: 14px 16px; }
+    .card__title { font-size: 14px; font-weight: 600; margin: 0 0 4px; }
+    .card__caption { font-size: 12.5px; color: var(--bb-ink-2); line-height: 1.5; margin: 0; }
+    .card__links { margin-top: 10px; font-size: 12px; }
+    .card__links a { color: var(--bb-accent); text-decoration: none; font-weight: 500; }
+    .card__links a:hover { text-decoration: underline; }
+
+    .legend {
+      margin-top: 44px;
+      background: var(--bb-bg);
+      border: 1px solid var(--bb-border);
+      border-radius: 10px;
+      padding: 20px 22px;
+      font-size: 13.5px;
+      color: var(--bb-ink-2);
+      line-height: 1.6;
+    }
+    .legend b { color: var(--bb-ink); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="page">
+      <h1>Diagram Engine — Proof Gallery</h1>
+      <p class="sub">
+        Token-driven diagram engine. Each diagram's markup is brand-agnostic; a client's brand is a
+        swappable token file. The two columns below are the <b>same diagrams</b> — the only difference
+        between a left page and its right counterpart is one line: <code>okta.css</code> → <code>northwind.css</code>.
+      </p>
+    </header>
+
+    <!-- Diagram A row -->
+    <section class="group">
+      <div class="group__head">
+        <span class="group__title group__title--okta">Okta (originals)</span>
+        <span class="group__note">·  vs  ·</span>
+        <span class="group__title group__title--nw">Northwind (same diagrams, rebranded)</span>
+      </div>
+
+      <div class="row">
+        <!-- A — Okta -->
+        <div class="card">
+          <div class="card__frame">
+            <iframe src="diagrams/any-source-of-truth.html" scrolling="no" title="Any source of truth — Okta"></iframe>
+          </div>
+          <div class="card__meta">
+            <p class="card__title">Diagram A · “Any source of truth” — Okta</p>
+            <p class="card__caption">Calm cream panel. Source systems collapse into a single Okta identity, shown by the indigo pill stack feeding the sunburst hero tile.</p>
+            <p class="card__links"><a href="diagrams/any-source-of-truth.html" target="_blank">Open full page →</a></p>
+          </div>
+        </div>
+
+        <!-- A — Northwind -->
+        <div class="card">
+          <div class="card__frame">
+            <iframe src="diagrams/any-source-of-truth.northwind.html" scrolling="no" title="Any source of truth — Northwind"></iframe>
+          </div>
+          <div class="card__meta">
+            <p class="card__title">Diagram A · “Any source of truth” — Northwind</p>
+            <p class="card__caption">Identical markup. Emerald accent, DM Sans, and an “N” monogram hero — produced purely by swapping the token file.</p>
+            <p class="card__links"><a href="diagrams/any-source-of-truth.northwind.html" target="_blank">Open full page →</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diagram B row -->
+    <section class="group">
+      <div class="group__head">
+        <span class="group__title group__title--okta">Okta (originals)</span>
+        <span class="group__note">·  vs  ·</span>
+        <span class="group__title group__title--nw">Northwind (same diagrams, rebranded)</span>
+      </div>
+
+      <div class="row">
+        <!-- B — Okta -->
+        <div class="card">
+          <div class="card__frame">
+            <iframe src="diagrams/partners-idp.html" scrolling="no" title="Partners to Okta — Okta"></iframe>
+          </div>
+          <div class="card__meta">
+            <p class="card__title">Diagram B · “Partners → Okta” — Okta</p>
+            <p class="card__caption">Premium blue-gradient panel. Three partner IdPs route through orthogonal connectors into the Okta hero, each edge labelled “IdP”.</p>
+            <p class="card__links"><a href="diagrams/partners-idp.html" target="_blank">Open full page →</a></p>
+          </div>
+        </div>
+
+        <!-- B — Northwind -->
+        <div class="card">
+          <div class="card__frame">
+            <iframe src="diagrams/partners-idp.northwind.html" scrolling="no" title="Partners to Okta — Northwind"></iframe>
+          </div>
+          <div class="card__meta">
+            <p class="card__title">Diagram B · “Partners → Okta” — Northwind</p>
+            <p class="card__caption">Same diagram, Northwind’s emerald gradient. The connector routing, tiles, and labels are unchanged — only brand tokens differ.</p>
+            <p class="card__links"><a href="diagrams/partners-idp.northwind.html" target="_blank">Open full page →</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="legend">
+      <b>How the rebrand works.</b> Every diagram links two stylesheets: a brand <b>token file</b>
+      (<code>engine/tokens/&lt;brand&gt;.css</code> — colors, fonts, hero mark, radii) and the shared
+      <b>style pack</b> (<code>engine/packs/okta-marketing.css</code> — component classes that only ever
+      read <code>var(--token)</code>). The pack hard-codes no brand value, so pointing a page at a
+      different token file re-skins it completely. <code>any-source-of-truth.html</code> and
+      <code>any-source-of-truth.northwind.html</code> have byte-identical diagram markup — verified by diff.
+    </div>
+
+  </div>
+</body>
+</html>

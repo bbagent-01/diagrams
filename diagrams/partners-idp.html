@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partners → Okta — Okta</title>
+  <!-- TOKEN FILE (brand). Swap this one line to rebrand. -->
+  <link rel="stylesheet" href="../engine/tokens/okta.css" />
+  <!-- STYLE PACK (shared component library, brand-agnostic). -->
+  <link rel="stylesheet" href="../engine/packs/okta-marketing.css" />
+  <style>
+    /* Page-local layout only — identical across brand variants. */
+    .panel--B {
+      width: 900px;
+      height: 900px;
+    }
+    /* Tiles are absolutely positioned to match the SVG connector
+       coordinate space (the SVG viewBox is 900x900, 1:1 with px). */
+    .panel--B .tile { position: absolute; }
+    .p1 { left: 96px; top: 214px; }
+    .p2 { left: 96px; top: 390px; }
+    .p3 { left: 96px; top: 566px; }
+    .hero { left: 684px; top: 390px; }
+  </style>
+</head>
+<body class="diagram-stage">
+
+  <!-- ===== DIAGRAM B — "Partner 1/2/3 → Okta" (blue gradient) ===== -->
+  <section class="panel panel--blue panel--B">
+
+    <!-- Connector layer: crisp orthogonal SVG routing.
+         Coordinate space = 900x900, 1:1 with the panel px box. -->
+    <svg class="connector-layer" viewBox="0 0 900 900" preserveAspectRatio="none">
+      <!-- P1: right, then DOWN into hero top (744,390) -->
+      <path d="M 216 274 H 744 V 386" />
+      <polygon class="arrow-fill" points="744,392 740,384 748,384" />
+
+      <!-- P2: straight into hero left edge (684,450) -->
+      <path d="M 216 450 H 678" />
+      <polygon class="arrow-fill" points="684,450 676,446 676,454" />
+
+      <!-- P3: right, then UP into hero bottom (744,510) -->
+      <path d="M 216 626 H 744 V 514" />
+      <polygon class="arrow-fill" points="744,508 740,516 748,516" />
+    </svg>
+
+    <!-- Edge labels riding the horizontal segments -->
+    <span class="edge-label" style="left:470px; top:274px;">IdP</span>
+    <span class="edge-label" style="left:440px; top:450px;">IdP</span>
+    <span class="edge-label" style="left:470px; top:626px;">IdP</span>
+
+    <!-- Partner tiles (glyph + label inside) -->
+    <div class="tile tile--soft tile--labeled p1">
+      <span class="person-glyph">
+        <span class="ring"></span>
+        <!-- Lucide: user-round -->
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="5"/>
+          <path d="M20 21a8 8 0 0 0-16 0"/>
+        </svg>
+      </span>
+      <span class="tile__caption">Partner 1</span>
+    </div>
+
+    <div class="tile tile--soft tile--labeled p2">
+      <span class="person-glyph">
+        <span class="ring"></span>
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="5"/>
+          <path d="M20 21a8 8 0 0 0-16 0"/>
+        </svg>
+      </span>
+      <span class="tile__caption">Partner 2</span>
+    </div>
+
+    <div class="tile tile--soft tile--labeled p3">
+      <span class="person-glyph">
+        <span class="ring"></span>
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="5"/>
+          <path d="M20 21a8 8 0 0 0-16 0"/>
+        </svg>
+      </span>
+      <span class="tile__caption">Partner 3</span>
+    </div>
+
+    <!-- Hero tile (brand mark via token) -->
+    <div class="tile tile--hero hero">
+      <span class="hero-mark"></span>
+    </div>
+
+  </section>
+
+</body>
+</html>

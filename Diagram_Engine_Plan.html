@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagram Engine — Planning Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF; --bg2:#F8F9FA; --bg3:#F1F3F5;
+    --ink:#1A1D21; --ink2:#6B7280; --ink3:#9CA3AF;
+    --border:#E5E7EB; --accent:#2563EB;
+    --green:#059669; --green-bg:#ECFDF5;
+    --amber:#D97706; --amber-bg:#FFFBEB;
+    --purple:#6B21A8; --purple-bg:#F5F3FF;
+    --r:10px;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"DM Sans",system-ui,sans-serif;
+    color:var(--ink); background:var(--bg2);
+    line-height:1.55; font-size:15px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:780px; margin:0 auto; padding:48px 24px 120px;}
+  /* header */
+  .hd{margin-bottom:14px;}
+  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600;}
+  h1{font-size:30px; font-weight:700; letter-spacing:-.02em; margin:8px 0 6px; line-height:1.15;}
+  .sub{color:var(--ink2); font-size:16px;}
+  .meta{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;}
+  .pill{font-family:var(--mono); font-size:11px; padding:4px 10px; border:1px solid var(--border); border-radius:999px; background:var(--bg); color:var(--ink2);}
+  .pill b{color:var(--ink); font-weight:600;}
+  /* toc */
+  .toc{background:var(--bg); border:1px solid var(--border); border-radius:var(--r); padding:14px 18px; margin:26px 0 10px;}
+  .toc-t{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink3); margin-bottom:8px;}
+  .toc ol{list-style:none; counter-reset:t; display:grid; grid-template-columns:1fr 1fr; gap:4px 18px;}
+  .toc li{counter-increment:t; font-size:14px;}
+  .toc li span{cursor:pointer; color:var(--ink); padding:3px 0; display:inline-block; border-bottom:1px solid transparent;}
+  .toc li span:hover{color:var(--accent); border-bottom-color:var(--accent);}
+  .toc li span::before{content:counter(t,decimal-leading-zero); font-family:var(--mono); color:var(--ink3); font-size:11px; margin-right:8px;}
+  /* sections */
+  section{background:var(--bg); border:1px solid var(--border); border-radius:var(--r); padding:28px 30px; margin-top:18px;}
+  .snum{font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:.1em; font-weight:600;}
+  h2{font-size:22px; font-weight:700; letter-spacing:-.01em; margin:4px 0 4px;}
+  h3{font-size:15px; font-weight:600; margin:22px 0 8px; letter-spacing:-.005em;}
+  .lede{color:var(--ink2); font-size:15px; margin-bottom:6px;}
+  p{margin:10px 0; color:var(--ink);}
+  ul,ol.body{margin:8px 0 8px 2px; padding-left:18px;}
+  li{margin:5px 0;}
+  li::marker{color:var(--ink3);}
+  strong{font-weight:600;}
+  code{font-family:var(--mono); font-size:.88em; background:var(--bg3); padding:1px 6px; border-radius:5px; color:var(--ink);}
+  .hr{height:1px; background:var(--border); margin:22px 0;}
+  /* callout */
+  .note{border-left:3px solid var(--accent); background:var(--bg2); padding:12px 16px; border-radius:0 8px 8px 0; margin:16px 0; font-size:14px;}
+  .note.green{border-color:var(--green); background:var(--green-bg);}
+  .note.amber{border-color:var(--amber); background:var(--amber-bg);}
+  .note.purple{border-color:var(--purple); background:var(--purple-bg);}
+  .note b{font-weight:600;}
+  /* two-col compare */
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0;}
+  .card{border:1px solid var(--border); border-radius:var(--r); padding:18px; background:var(--bg);}
+  .card .ct{font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px; margin-bottom:2px;}
+  .card .cs{color:var(--ink2); font-size:13px; margin-bottom:12px;}
+  .tag{font-family:var(--mono); font-size:10px; padding:2px 7px; border-radius:999px; font-weight:600; letter-spacing:.03em;}
+  .tag.okta{background:#E8EFFB; color:#1662DD;}
+  .tag.ht{background:#E1F7F2; color:#007A92;}
+  .mini{font-size:13px; margin:6px 0;}
+  .mini b{font-weight:600;}
+  /* swatches */
+  .sw-row{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 4px;}
+  .sw{display:flex; flex-direction:column; align-items:center; gap:4px;}
+  .sw .chip{width:46px; height:34px; border-radius:7px; border:1px solid rgba(0,0,0,.08);}
+  .sw .hx{font-family:var(--mono); font-size:9.5px; color:var(--ink2);}
+  /* specimen stage */
+  .stage{border:1px dashed var(--border); border-radius:var(--r); padding:22px; margin:12px 0; display:flex; align-items:center; justify-content:center; min-height:120px; background:var(--bg2);}
+  .stage.ht-stage{background:linear-gradient(135deg,#ECFCFF,#F5F3FF);}
+  /* okta specimen */
+  .ok-node{background:#D0E0F8; color:#2A3B5C; border-radius:9px; padding:11px 16px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:9px;}
+  .ok-glyph{width:18px;height:18px;border-radius:50%; border:2px solid #1662DD; display:inline-block;}
+  .ok-flow{display:flex; flex-direction:column; align-items:center; gap:2px;}
+  .ok-life{width:1.5px; height:26px; background:repeating-linear-gradient(#9aa7c0 0 4px, transparent 4px 8px);}
+  .ok-dot{width:11px;height:11px;border-radius:50%; background:#1662DD;}
+  /* ht specimen */
+  .ht-node{background:rgba(255,255,255,.72); backdrop-filter:blur(10px); border:1px solid #E0DEDF; border-radius:12px; padding:12px 14px; display:flex; align-items:center; gap:11px; box-shadow:0 4px 20px rgba(0,0,0,.07), 0 2px 14px rgba(64,222,158,.18);}
+  .ht-logo{width:30px;height:30px;border-radius:8px; background:linear-gradient(135deg,#29B5E8,#0a6e99); display:flex;align-items:center;justify-content:center; color:#fff; font-weight:700; font-size:13px;}
+  .ht-tx .l{font-weight:600; font-size:14px; color:#302D2E;}
+  .ht-tx .m{font-family:var(--mono); font-size:10.5px; color:#6B7280;}
+  .ht-pill{margin-left:6px; font-size:10px; font-weight:600; color:#007A92; background:rgba(64,222,158,.18); padding:3px 9px; border-radius:999px;}
+  /* equation strip */
+  .eq{display:flex; align-items:stretch; gap:8px; flex-wrap:wrap; margin:18px 0; }
+  .eq .box{flex:1; min-width:110px; border:1px solid var(--border); border-radius:10px; padding:12px; text-align:center; background:var(--bg2);}
+  .eq .box .k{font-family:var(--mono); font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; font-weight:600;}
+  .eq .box .v{font-size:13px; font-weight:600; margin-top:3px;}
+  .eq .box .d{font-size:11.5px; color:var(--ink2); margin-top:3px; line-height:1.35;}
+  .eq .op{display:flex; align-items:center; font-weight:700; color:var(--ink3); font-size:18px;}
+  .eq .out{flex:1.1; min-width:120px; border:1px solid var(--green); background:var(--green-bg); border-radius:10px; padding:12px; text-align:center;}
+  .eq .out .k{font-family:var(--mono); font-size:10px; color:var(--green); text-transform:uppercase; letter-spacing:.08em; font-weight:600;}
+  .eq .out .v{font-size:13px; font-weight:700; margin-top:3px;}
+  /* atomic chips */
+  .grp-t{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink3); margin:16px 0 8px;}
+  .chips{display:flex; flex-wrap:wrap; gap:7px;}
+  .ach{font-size:12.5px; padding:6px 11px; border:1px solid var(--border); border-radius:8px; background:var(--bg2);}
+  .ach b{font-weight:600;}
+  .ach.t{background:#fff; border-color:#dbe4f3;}
+  /* pipeline */
+  .pipe{display:grid; gap:10px; margin:14px 0;}
+  .step{display:flex; gap:14px; align-items:flex-start; border:1px solid var(--border); border-radius:10px; padding:13px 16px; background:var(--bg);}
+  .step .n{font-family:var(--mono); font-weight:600; font-size:12px; color:#fff; background:var(--ink); min-width:24px;height:24px; border-radius:7px; display:flex;align-items:center;justify-content:center;}
+  .step .b{flex:1;}
+  .step .b .h{font-weight:600; font-size:14px;}
+  .step .b .t{font-size:13px; color:var(--ink2); margin-top:2px;}
+  /* phases */
+  .phase{border:1px solid var(--border); border-radius:10px; padding:16px 18px; margin:11px 0; position:relative;}
+  .phase .ph-h{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
+  .ph-tag{font-family:var(--mono); font-size:11px; font-weight:700; padding:3px 9px; border-radius:7px;}
+  .ph0{background:var(--bg3); color:var(--ink);}
+  .ph1{background:var(--green-bg); color:var(--green);}
+  .ph2{background:#E8EFFB; color:var(--accent);}
+  .ph3{background:var(--purple-bg); color:var(--purple);}
+  .ph4{background:var(--amber-bg); color:var(--amber);}
+  .phase .ph-name{font-weight:700; font-size:15px;}
+  .phase .ph-goal{font-size:13.5px; color:var(--ink2); margin-bottom:4px;}
+  .phase ul{margin-top:6px;}
+  .phase li{font-size:13.5px;}
+  /* decisions */
+  .dec{border:1px solid var(--border); border-radius:10px; padding:18px; margin:13px 0;}
+  .dec .dh{font-weight:700; font-size:15px; display:flex; gap:9px; align-items:center;}
+  .dec .dq{color:var(--ink2); font-size:13.5px; margin:4px 0 10px;}
+  .opt{display:flex; gap:9px; align-items:flex-start; padding:7px 0; border-top:1px solid var(--bg3); font-size:13.5px;}
+  .opt:first-of-type{border-top:none;}
+  .opt .rec{font-family:var(--mono); font-size:9.5px; font-weight:700; color:var(--green); background:var(--green-bg); padding:2px 7px; border-radius:5px; white-space:nowrap; margin-top:1px;}
+  .opt .alt{font-family:var(--mono); font-size:9.5px; font-weight:600; color:var(--ink3); background:var(--bg3); padding:2px 7px; border-radius:5px; white-space:nowrap; margin-top:1px;}
+  .opt .ot b{font-weight:600;}
+  .dnum{font-family:var(--mono); font-size:11px; font-weight:700; color:#fff; background:var(--accent); min-width:22px;height:22px;border-radius:6px; display:flex;align-items:center;justify-content:center;}
+  .foot{text-align:center; color:var(--ink3); font-size:12px; margin-top:30px; font-family:var(--mono);}
+  @media(max-width:680px){ .cols,.toc ol{grid-template-columns:1fr;} .eq{flex-direction:column;} .eq .op{justify-content:center;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hd">
+    <div class="eyebrow">Brightbase · Planning Assessment</div>
+    <h1>The Diagram Engine</h1>
+    <div class="sub">A system to produce Okta- and Hightouch-grade B2B SaaS diagrams for clients — on brand, at scale.</div>
+    <div class="meta">
+      <span class="pill">Operated by <b>Brightbase (internal)</b></span>
+      <span class="pill">Branding <b>Per-client</b></span>
+      <span class="pill">Output <b>Editable vector (SVG/Figma)</b></span>
+      <span class="pill">Status <b>v1 — for your review</b></span>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-t">Contents</div>
+    <ol>
+      <li><span onclick="go('s1')">The bet, in one breath</span></li>
+      <li><span onclick="go('s2')">Decisions locked</span></li>
+      <li><span onclick="go('s3')">Reference teardown</span></li>
+      <li><span onclick="go('s4')">Atomic elements of a diagram</span></li>
+      <li><span onclick="go('s5')">The engine (the core idea)</span></li>
+      <li><span onclick="go('s6')">How we build it</span></li>
+      <li><span onclick="go('s7')">The workflow, end to end</span></li>
+      <li><span onclick="go('s8')">Phased build plan</span></li>
+      <li><span onclick="go('s9')">Open decisions for you</span></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <section id="s1">
+    <div class="snum">01</div>
+    <h2>The bet, in one breath</h2>
+    <p>Okta and Hightouch don't make "nice diagrams" — each runs a <strong>system</strong>: a tight set of color, type, spacing and shape rules, plus a handful of signature patterns, applied with discipline every single time. That's <em>why</em> they look expensive and consistent.</p>
+    <p>So we don't build "a diagram maker." We build a <strong>token-driven diagram engine</strong> where three things plug together — a client's brand, a chosen visual style, and a diagram type — and a finished, editable, on-brand diagram comes out the other side. Re-branding the same diagram for a different client becomes a one-click swap. <strong>That swap is the whole product.</strong></p>
+    <div class="note green"><b>The payoff:</b> once a diagram exists, producing the same diagram in any client's brand — or a new diagram in a brand we've already set up — takes minutes, not a designer's afternoon. That is what "at scale" means here.</div>
+  </section>
+
+  <!-- 2 -->
+  <section id="s2">
+    <div class="snum">02</div>
+    <h2>Decisions locked</h2>
+    <p class="lede">Your three answers point at exactly one architecture — they're mutually reinforcing.</p>
+    <ul>
+      <li><strong>Internal (Brightbase) operates it</strong> → we optimize for a skilled operator's speed and control, not a foolproof public UI. Lower UX burden, faster to ship.</li>
+      <li><strong>Per-client branding</strong> → branding must be <em>data</em> (a swappable file of colors, fonts, logos), never hard-coded. This is the single most important design constraint.</li>
+      <li><strong>Editable vector (SVG / Figma)</strong> → we render to clean SVG. SVG scales infinitely, drops into decks, docs and the web, and imports into Figma as real editable layers. It's also the format we can fully control pixel-for-pixel.</li>
+    </ul>
+    <div class="note"><b>Why they fit together:</b> "per-client, at scale, editable" can only be hit if branding is a token file and the output is code-defined vector. Hand-drawing in Figma can't scale; template images can't re-brand. The engine approach is the one path that satisfies all three.</div>
+  </section>
+
+  <!-- 3 -->
+  <section id="s3">
+    <div class="snum">03</div>
+    <h2>Reference teardown</h2>
+    <p class="lede">We pulled both brands apart down to the hex values and signature moves. They are two different aesthetics with shared DNA — and that contrast is a gift, not a problem.</p>
+
+    <div class="cols">
+      <div class="card">
+        <div class="ct"><span class="tag okta">OKTA</span></div>
+        <div class="cs">Flat, calm, editorial. Best at <b>flows</b> — auth handshakes, sequences, processes.</div>
+        <div class="mini"><b>Color:</b> soft per-actor pastel lanes — each participant owns one tint.</div>
+        <div class="sw-row">
+          <div class="sw"><div class="chip" style="background:#FFF2D9"></div><div class="hx">#FFF2D9</div></div>
+          <div class="sw"><div class="chip" style="background:#D0E0F8"></div><div class="hx">#D0E0F8</div></div>
+          <div class="sw"><div class="chip" style="background:#CCD4E4"></div><div class="hx">#CCD4E4</div></div>
+          <div class="sw"><div class="chip" style="background:#ECE0E6"></div><div class="hx">#ECE0E6</div></div>
+          <div class="sw"><div class="chip" style="background:#3A93A4"></div><div class="hx">#3A93A4</div></div>
+        </div>
+        <div class="mini"><b>Depth:</b> strictly flat — no shadows, no gradients, white background always.</div>
+        <div class="mini"><b>Signature moves:</b> numbered straight arrows (read like recipe steps), circle = sender / diamond = receiver, direction encoded by color (blue out, rose back), the product's logo dropped straight into its node, API paths in teal monospace.</div>
+        <div class="stage">
+          <div class="ok-node"><span class="ok-glyph"></span>Your Application</div>
+          <div class="ok-flow" style="margin-left:14px"><div class="ok-dot"></div><div class="ok-life"></div></div>
+        </div>
+        <div class="cs" style="margin:0">A flat tinted node on a dashed lifeline — calm and legible.</div>
+      </div>
+
+      <div class="card">
+        <div class="ct"><span class="tag ht">HIGHTOUCH</span></div>
+        <div class="cs">Glassy, premium, alive. Best at <b>architecture</b> — data flows, integrations, stacks.</div>
+        <div class="mini"><b>Color:</b> a two-green system + warm neutrals. Mint is an <em>accent only</em>.</div>
+        <div class="sw-row">
+          <div class="sw"><div class="chip" style="background:#007A92"></div><div class="hx">#007A92</div></div>
+          <div class="sw"><div class="chip" style="background:#40DE9E"></div><div class="hx">#40DE9E</div></div>
+          <div class="sw"><div class="chip" style="background:#50BFD3"></div><div class="hx">#50BFD3</div></div>
+          <div class="sw"><div class="chip" style="background:#101111"></div><div class="hx">#101111</div></div>
+          <div class="sw"><div class="chip" style="background:#E0DEDF"></div><div class="hx">#E0DEDF</div></div>
+        </div>
+        <div class="mini"><b>Depth:</b> flat-with-glass — frosted blur, soft shadow, a teal glow, animated "data in motion."</div>
+        <div class="mini"><b>Signature moves:</b> frosted pill/card nodes, every third-party logo in an identical tile so a messy logo set reads as one tidy grid, thin curved lines with mint flowing dashes, three-lane left→right composition (sources → center → destinations), counts/IDs in monospace.</div>
+        <div class="stage ht-stage">
+          <div class="ht-node"><div class="ht-logo">❄</div><div class="ht-tx"><div class="l">Snowflake</div><div class="m">2,988 rows</div></div><span class="ht-pill">live</span></div>
+        </div>
+        <div class="cs" style="margin:0">A frosted logo-tile card with a status pill — premium control-panel feel.</div>
+      </div>
+    </div>
+
+    <h3>The shared DNA (this is what we actually build)</h3>
+    <ul>
+      <li><strong>Strict scales, never freehand.</strong> Both lock radius, type size and spacing to a fixed ladder. Discipline is the secret.</li>
+      <li><strong>Real logos in uniform containers.</strong> Both drop brand marks into same-size tiles so heterogeneous logos read as one system.</li>
+      <li><strong>Semantic color.</strong> Color means something (which actor / which role) — it's never decorative.</li>
+      <li><strong>Restraint + one accent.</strong> Mostly neutral, one electric highlight, ruthless alignment, generous white space.</li>
+      <li><strong>The product lives in a node.</strong> Okta and Hightouch each put their own logo inside the diagram — the diagram <em>is</em> the pitch.</li>
+    </ul>
+    <div class="note amber"><b>The strategic read:</b> these aren't competing styles to choose between — they're our first two <b>style packs</b>. Okta = our "Flow" pack; Hightouch = our "Architecture" pack. A client's brand (their colors/fonts/logos) plugs into whichever pack the diagram calls for.</div>
+  </section>
+
+  <!-- 4 -->
+  <section id="s4">
+    <div class="snum">04</div>
+    <h2>Atomic elements of a diagram</h2>
+    <p class="lede">Every diagram in this space is assembled from the same small kit. This kit becomes our component library — build each piece once, reuse forever.</p>
+
+    <div class="grp-t">Structural primitives — the skeleton</div>
+    <div class="chips">
+      <span class="ach"><b>Node</b> · a service / app / product</span>
+      <span class="ach"><b>Actor</b> · a user or external system</span>
+      <span class="ach"><b>Data store</b> · DB / warehouse / queue</span>
+      <span class="ach"><b>Connector</b> · the line between things</span>
+      <span class="ach"><b>Port</b> · where a line docks on a node</span>
+      <span class="ach"><b>Container</b> · a group / suite / region</span>
+      <span class="ach"><b>Boundary</b> · a trust zone / perimeter</span>
+      <span class="ach"><b>Lane</b> · a swimlane by owner or stage</span>
+      <span class="ach"><b>Canvas</b> · grid / background field</span>
+    </div>
+
+    <div class="grp-t">Content primitives — the meaning</div>
+    <div class="chips">
+      <span class="ach"><b>Title</b></span>
+      <span class="ach"><b>Node label</b></span>
+      <span class="ach"><b>Edge label</b> · "syncs", "OAuth"</span>
+      <span class="ach"><b>Step badge</b> · 1 → 2 → 3</span>
+      <span class="ach"><b>Callout</b> · a pointer note</span>
+      <span class="ach"><b>Legend</b> · the key</span>
+      <span class="ach"><b>Status badge</b> · "live", "99.9%"</span>
+      <span class="ach"><b>Icon / logo</b></span>
+    </div>
+
+    <div class="grp-t">Diagram types — the assembled patterns we'd support</div>
+    <div class="chips">
+      <span class="ach t"><b>System architecture</b></span>
+      <span class="ach t"><b>Data flow / pipeline</b></span>
+      <span class="ach t"><b>Integration / network</b></span>
+      <span class="ach t"><b>Sequence / auth flow</b></span>
+      <span class="ach t"><b>User journey</b></span>
+      <span class="ach t"><b>Deployment / topology</b></span>
+      <span class="ach t"><b>Before vs after</b></span>
+      <span class="ach t"><b>Layered stack</b></span>
+      <span class="ach t"><b>Marketing hero</b></span>
+    </div>
+    <div class="note"><b>Read this way:</b> a <b>type</b> (e.g. integration) decides the layout; a <b>style pack</b> (e.g. Hightouch) decides how the primitives look; the <b>brand tokens</b> decide the exact colors, fonts and logos. Same kit, infinite outputs.</div>
+  </section>
+
+  <!-- 5 -->
+  <section id="s5">
+    <div class="snum">05</div>
+    <h2>The engine — the core idea</h2>
+    <p class="lede">Four inputs combine into one output. Change any one input and the diagram updates — that separation is the entire design.</p>
+
+    <div class="eq">
+      <div class="box"><div class="k">Brand</div><div class="v">Client tokens</div><div class="d">Colors, fonts, logo set. One swappable file per client.</div></div>
+      <div class="op">×</div>
+      <div class="box"><div class="k">Style</div><div class="v">Style pack</div><div class="d">Flow (Okta) or Architecture (Hightouch). How things look.</div></div>
+      <div class="op">×</div>
+      <div class="box"><div class="k">Type</div><div class="v">Archetype</div><div class="d">Sequence, integration, data-flow… How things arrange.</div></div>
+      <div class="op">×</div>
+      <div class="box"><div class="k">Content</div><div class="v">The spec</div><div class="d">The actual nodes, edges and labels for this diagram.</div></div>
+      <div class="op">→</div>
+      <div class="out"><div class="k">Result</div><div class="v">On-brand editable diagram</div></div>
+    </div>
+
+    <ul>
+      <li><strong>Brand tokens</strong> are the differentiator. Swap Acme's file for Globex's, press render, and every diagram we've ever made is now in Globex's brand. This is "per-client at scale" made literal.</li>
+      <li><strong>Style packs</strong> are reusable looks. We start with two (the Okta and Hightouch teardowns above), add more over time.</li>
+      <li><strong>Archetypes</strong> are reusable layouts with smart auto-arrangement, so the operator never nudges boxes by hand.</li>
+      <li><strong>The spec</strong> is the only thing that's truly per-diagram — and it's the part an AI assistant drafts from a plain-English brief.</li>
+    </ul>
+  </section>
+
+  <!-- 6 -->
+  <section id="s6">
+    <div class="snum">06</div>
+    <h2>How we build it</h2>
+    <p class="lede">We researched every realistic approach against five tests: can it look Okta/Hightouch-grade, can it repeat, can it re-brand per client, can an AI drive it, and can it export clean vectors. One path wins; one stays in the back pocket; the rest are traps.</p>
+
+    <div class="note green"><b>Primary — a custom branded component library that renders to SVG, auto-arranged by a layout engine, and authored by AI from a structured brief.</b> It's the only approach that hits a top-tier brand ceiling (we own every pixel), makes per-client re-brand a one-file swap, and is the most natural thing for an AI to drive (it writes a structured spec, not pixels). Exports clean SVG → PNG / PDF / Figma.</div>
+
+    <h3>The recommended stack, in plain terms</h3>
+    <ul>
+      <li><strong>A component library</strong> — every atomic element from §4, built once as a branded, theme-able vector piece.</li>
+      <li><strong>A layout brain</strong> — an automatic arrangement engine places nodes and routes lines cleanly, so diagrams look hand-tuned without hand-tuning.</li>
+      <li><strong>An AI author</strong> — turns a plain-English brief ("show SSO from Okta into the client's app") into the structured spec the engine renders.</li>
+      <li><strong>A token system</strong> — the per-client brand file the whole thing reads from.</li>
+    </ul>
+
+    <h3>The fast lane (kept in reserve)</h3>
+    <p>For quick, internal, "good enough" diagrams we keep a <strong>diagram-as-code fast lane</strong> (a tool called D2): the AI writes a few lines, a per-client theme is applied, and it batch-renders. It gets ~80% of the polish for ~20% of the effort — useful for volume drafts, not for the showcase pieces.</p>
+
+    <h3>What we deliberately avoid</h3>
+    <ul>
+      <li><strong>Mermaid</strong> (the common default) — its brand ceiling is too low; it will never look like Okta or Hightouch.</li>
+      <li><strong>Building the core in Figma's API</strong> — gorgeous fidelity, wrong tool for headless mass-production. We reserve Figma as an <em>export target</em> (our SVG imports into Figma as editable layers) and for the occasional bespoke hero diagram.</li>
+    </ul>
+  </section>
+
+  <!-- 7 -->
+  <section id="s7">
+    <div class="snum">07</div>
+    <h2>The workflow, end to end</h2>
+    <p class="lede">What it actually feels like for a Brightbase operator to make one diagram — and then ten.</p>
+    <div class="pipe">
+      <div class="step"><div class="n">1</div><div class="b"><div class="h">Intake</div><div class="t">Operator picks the client (loads their brand), the diagram type, and the style pack — then describes the diagram in plain English.</div></div></div>
+      <div class="step"><div class="n">2</div><div class="b"><div class="h">AI drafts the spec</div><div class="t">The assistant turns the brief into a structured draft — the nodes, the connections, the labels, the steps. Operator reviews and edits in plain language.</div></div></div>
+      <div class="step"><div class="n">3</div><div class="b"><div class="h">Render</div><div class="t">The engine auto-arranges everything and paints it in the chosen style with the client's exact colors, fonts and logos. Out comes a clean diagram.</div></div></div>
+      <div class="step"><div class="n">4</div><div class="b"><div class="h">Refine</div><div class="t">Operator tweaks — rename a node, swap a logo, reorder a step, change the accent. Re-render is instant.</div></div></div>
+      <div class="step"><div class="n">5</div><div class="b"><div class="h">Export</div><div class="t">Editable SVG (plus PNG / PDF, and Figma layers). Drops straight into the client's deck, doc, or site.</div></div></div>
+      <div class="step"><div class="n">6</div><div class="b"><div class="h">Reuse &amp; rebrand</div><div class="t">Same spec + a different client's brand = a new on-brand diagram in seconds. This step is where "at scale" actually pays off.</div></div></div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section id="s8">
+    <div class="snum">08</div>
+    <h2>Phased build plan</h2>
+    <p class="lede">Each phase ends in something you can see. We prove the magic on one real diagram early, then widen.</p>
+
+    <div class="phase">
+      <div class="ph-h"><span class="ph-tag ph0">PHASE 0</span><span class="ph-name">Foundations</span></div>
+      <div class="ph-goal">The plumbing nothing works without.</div>
+      <ul>
+        <li>Define the brand-token format + build the first two client brand profiles (plus a Brightbase default).</li>
+        <li>Build the atomic component library from §4 as theme-able vector pieces.</li>
+        <li>Stand up the project repo, deploy target, and the review Hub.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="ph-h"><span class="ph-tag ph1">PHASE 1</span><span class="ph-name">One diagram type, end to end — the proof</span></div>
+      <div class="ph-goal">Walk the entire pipeline on a single archetype, on a real client.</div>
+      <ul>
+        <li>Recommended first type: <strong>integration / architecture</strong> in the Hightouch "Architecture" pack — the most-requested B2B SaaS diagram and the best showcase for per-client logos and color.</li>
+        <li>Brief → AI spec → auto-layout → branded SVG → export, working start to finish.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="ph-h"><span class="ph-tag ph2">PHASE 2</span><span class="ph-name">Re-brand + second style pack</span></div>
+      <div class="ph-goal">Prove the core promise.</div>
+      <ul>
+        <li>Swap one client's brand for another and re-render the Phase-1 diagram — the "at scale" demo.</li>
+        <li>Add the Okta "Flow" pack so we have two looks across N brands.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="ph-h"><span class="ph-tag ph3">PHASE 3</span><span class="ph-name">More diagram types</span></div>
+      <div class="ph-goal">Widen the catalog.</div>
+      <ul>
+        <li>Add sequence / auth flow, data-flow / pipeline, before-vs-after, layered stack.</li>
+        <li>Add Figma-layer export for clients who want to edit natively.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="ph-h"><span class="ph-tag ph4">PHASE 4</span><span class="ph-name">Operator experience + true scale</span></div>
+      <div class="ph-goal">Make producing a diagram fast and repeatable.</div>
+      <ul>
+        <li>A clean intake + refine interface so an operator goes brief-to-export in minutes.</li>
+        <li>Batch and bulk-rebrand tooling for producing diagram sets across a client roster.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section id="s9">
+    <div class="snum">09</div>
+    <h2>Open decisions for you</h2>
+    <p class="lede">Three calls I want your read on before I lock the plan and start Phase 0. Each has my recommendation — reply with a number + your pick, or just "go with your recs."</p>
+
+    <div class="dec">
+      <div class="dh"><span class="dnum">1</span> Core engine: custom SVG vs the fast lane</div>
+      <div class="dq">Do we invest in the custom branded engine as the core, or lean on the quicker diagram-as-code path?</div>
+      <div class="opt"><span class="rec">REC</span><div class="ot"><b>Custom SVG engine as the core.</b> Only path to Okta/Hightouch quality + true per-client re-brand. More upfront build, far higher ceiling — and the branding <em>is</em> the differentiator.</div></div>
+      <div class="opt"><span class="alt">ALT</span><div class="ot"><b>Fast lane (D2) first.</b> Live diagrams in days, but a visible quality ceiling. Good as a reserve, wrong as the core.</div></div>
+    </div>
+
+    <div class="dec">
+      <div class="dh"><span class="dnum">2</span> First diagram type to prove it on</div>
+      <div class="dq">Where do we point Phase 1?</div>
+      <div class="opt"><span class="rec">REC</span><div class="ot"><b>Integration / architecture (Hightouch look).</b> The most common B2B SaaS deliverable and the best showcase for per-client logos and color.</div></div>
+      <div class="opt"><span class="alt">ALT</span><div class="ot"><b>Auth / sequence (Okta look).</b> Choose this instead if your clients skew identity- or security-heavy.</div></div>
+    </div>
+
+    <div class="dec">
+      <div class="dh"><span class="dnum">3</span> What "per-client branding" means</div>
+      <div class="dq">Confirming my read so I build the right thing.</div>
+      <div class="opt"><span class="rec">REC</span><div class="ot"><b>Client's colors / fonts / logos plugged into <em>our</em> style packs.</b> We don't rebuild each client's diagram language from scratch — we apply their brand on top of our proven looks. This is what makes it scale.</div></div>
+      <div class="opt"><span class="alt">ALT</span><div class="ot"><b>Bespoke per client.</b> Match each client's own diagram conventions exactly. Higher fidelity, far lower scale — only if a few marquee clients demand it.</div></div>
+    </div>
+
+    <div class="note purple"><b>Once you reply:</b> I'll lock this plan, set up the internal status board + your review Hub, and kick off Phase 0 — all via spun-up sessions. You'll get one short line from me with a link when there's something to see.</div>
+  </section>
+
+  <div class="foot">Brightbase · Diagram Engine · planning v1 · 2026-05-26</div>
+
+</div>
+<script>
+  function go(id){
+    var el=document.getElementById(id);
+    if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  }
+</script>
+</body>
+</html>

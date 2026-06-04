@@ -1,0 +1,335 @@
+/* ============================================================
+   OKTA-MARKETING — style pack (component library)
+   ------------------------------------------------------------
+   Reusable component classes for the "Okta marketing" diagram
+   look. RULE: this file NEVER hard-codes a brand color, font,
+   or hero mark. Every brand value is read via var(--token),
+   resolved by whichever token file the page links. That is what
+   makes a rebrand a one-file swap.
+
+   The only literal colors permitted here are structural neutrals
+   that are intentionally brand-agnostic (pure white tiles, the
+   near-white inner card, hairline borders) — these are part of
+   the *look* of the pack, not the *brand*. Anything a client
+   would want to change (accent, gradient, cream, ink, connector,
+   hero mark, fonts, radii) is a token.
+   ============================================================ */
+
+/* ---------- Reset / base ---------- */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* The diagram stage: centers the panel on a white page.
+   Used as the page <body> wrapper so every diagram is framed
+   identically. */
+.diagram-stage {
+  min-height: 100vh;
+  width: 100%;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+/* ============================================================
+   PANEL — the framed canvas behind a diagram
+   ============================================================ */
+.panel {
+  position: relative;
+  border-radius: var(--panel-radius);
+  box-sizing: border-box;
+}
+
+/* Cream variant (Diagram A) */
+.panel--cream {
+  background: var(--panel-cream);
+  padding: 64px;
+}
+
+/* Blue-gradient variant (Diagram B).
+   Gradient runs bottom-left (from) -> top-right (to) at 135deg,
+   with a soft white bloom in the top-right corner. */
+.panel--blue {
+  background:
+    radial-gradient(120% 120% at 100% 0%,
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0) 55%),
+    linear-gradient(135deg, var(--panel-grad-from), var(--panel-grad-to));
+  overflow: hidden;
+}
+
+/* Headline inside a panel (top-left, calm/editorial) */
+.panel__headline {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+/* ============================================================
+   SOURCES CARD — near-white rounded container (Diagram A)
+   Holds the "out of box integrations" checkbox + the pill stack.
+   ============================================================ */
+.sources-card {
+  background: #FCFBF8;
+  border: 1px solid #E4DFD5;
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.sources-card__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sources-card__label {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* Filled checkbox — accent fill, white check */
+.checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.checkbox svg {
+  width: 14px;
+  height: 14px;
+  stroke: #FFFFFF;
+  stroke-width: 3;
+  fill: none;
+}
+
+/* ============================================================
+   PILL — accent button: solid accent, white line-icon + label
+   ============================================================ */
+.pill-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pill {
+  height: 58px;
+  border-radius: var(--pill-radius);
+  background: var(--accent);
+  box-shadow: 0 6px 16px var(--accent-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;   /* icon+label group sits centered */
+  gap: 12px;
+  padding: 0 20px;
+}
+.pill__icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pill__icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: #FFFFFF;
+  stroke-width: 2;
+  fill: none;
+}
+.pill__label {
+  font-size: 17px;
+  font-weight: 500;
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   TILE — white rounded node tile (hero / logo / glyph holder)
+   ============================================================ */
+.tile {
+  width: 120px;
+  height: 120px;
+  background: #FFFFFF;
+  border-radius: var(--tile-radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+/* Hero tile holds the brand mark (token-driven via --hero-logo) */
+.tile--hero .hero-mark {
+  width: 56px;
+  height: 56px;
+}
+
+/* On the blue panel the partner tiles are a faint cool white */
+.tile--soft {
+  background: #F5F6FF;
+  border-radius: 18px;
+}
+
+/* Partner tile: glyph + label stacked inside the tile */
+.tile--labeled {
+  flex-direction: column;
+  gap: 8px;
+}
+.tile__glyph {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.tile__glyph svg {
+  width: 40px;
+  height: 40px;
+  fill: none;
+}
+.tile__caption {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+}
+
+/* ============================================================
+   HERO MARK — brand sunburst / monogram.
+   The actual artwork is supplied by the token file via
+   --hero-logo (a data-URI SVG). The pack only positions a box
+   and paints that token as a centered, contained background.
+   This keeps the markup brand-agnostic: <span class="hero-mark">.
+   ============================================================ */
+.hero-mark {
+  display: inline-block;
+  background-image: var(--hero-logo);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* Person glyph (Diagram B partner tiles): a Lucide circle-user
+   drawn dark, wrapped in a thin accent ring so the accent shows.
+   The ring color is the brand accent (token-driven). */
+.person-glyph {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+.person-glyph .ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+}
+.person-glyph svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  stroke: var(--ink);
+  stroke-width: 1.8;
+  fill: none;
+}
+
+/* ============================================================
+   CONNECTORS
+   ============================================================ */
+
+/* Simple straight horizontal connector on cream (Diagram A).
+   Implemented with a hairline rule + a CSS arrowhead. */
+.connector-h {
+  position: relative;
+  height: 1.5px;
+  background: var(--connector-on-cream);
+  align-self: center;
+}
+.connector-h::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 8px solid var(--connector-on-cream);
+}
+
+/* SVG connector layer (Diagram B) — absolutely fills the panel.
+   Paths + marker arrowheads are styled here; stroke reads the
+   on-blue connector token. */
+.connector-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.connector-layer path {
+  fill: none;
+  stroke: var(--connector-on-blue);
+  stroke-width: 1.5;
+}
+.connector-layer .arrow-fill {
+  fill: var(--connector-on-blue);
+  stroke: none;
+}
+
+/* Edge label (e.g. "IdP") that rides a connector segment */
+.edge-label {
+  position: absolute;
+  font-size: 13px;
+  font-weight: 500;
+  color: #FFFFFF;
+  transform: translate(-50%, -50%);
+  letter-spacing: 0.01em;
+}
+
+/* ============================================================
+   APP-WINDOW CARD — white card w/ header + skeleton bars
+   (reserved component for later refs; included for completeness)
+   ============================================================ */
+.app-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+.app-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #EEF0F4;
+  font-size: 14px;
+  font-weight: 600;
+}
+.app-card__body { padding: 16px; }
+.skeleton-bar {
+  height: 10px;
+  border-radius: 6px;
+  background: var(--skeleton);
+  margin-bottom: 10px;
+}

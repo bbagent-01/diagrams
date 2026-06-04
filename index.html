@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagram Engine · Review Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF; --bg2:#F8F9FA; --bg3:#F1F3F5;
+    --ink:#1A1D21; --ink2:#6B7280; --ink3:#9CA3AF;
+    --border:#E5E7EB; --accent:#2563EB;
+    --green:#059669; --green-bg:#ECFDF5;
+    --amber:#D97706; --amber-bg:#FFFBEB;
+    --purple:#6B21A8; --purple-bg:#F5F3FF;
+    --red:#B91C1C; --red-bg:#FEF2F2;
+    --r:10px;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:"DM Sans",system-ui,sans-serif; color:var(--ink); background:var(--bg2); line-height:1.55; font-size:15px; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:820px; margin:0 auto; padding:36px 22px 100px;}
+  /* header */
+  .hdrow{display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin-bottom:8px;}
+  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600;}
+  h1{font-size:24px; font-weight:700; letter-spacing:-.015em; margin:6px 0 2px;}
+  .sub{color:var(--ink2); font-size:14px;}
+  .util{display:flex; gap:8px; flex-wrap:wrap;}
+  .util a{text-decoration:none; font-family:var(--mono); font-size:11px; padding:5px 10px; border:1px solid var(--border); border-radius:7px; color:var(--ink); background:var(--bg); white-space:nowrap;}
+  .util a:hover{border-color:var(--accent); color:var(--accent);}
+  .meta{margin-top:14px; font-family:var(--mono); font-size:11px; color:var(--ink3);}
+  /* section */
+  .sec{margin-top:26px;}
+  .sec-h{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .sec-h .lbl{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;}
+  .sec-h.pin .lbl{color:var(--red);}
+  .sec-h.fl .lbl{color:var(--amber);}
+  .sec-h.pl .lbl{color:var(--accent);}
+  .sec-h.sh .lbl{color:var(--green);}
+  .sec-h .ln{flex:1; height:1px; background:var(--border);}
+  .sec-h .ct{font-family:var(--mono); font-size:10px; color:var(--ink3);}
+  /* item card */
+  .item{background:var(--bg); border:1px solid var(--border); border-radius:var(--r); padding:18px 20px; margin-bottom:10px; position:relative;}
+  .item.pinned{border-left:3px solid var(--red);}
+  .item-top{display:flex; align-items:center; gap:10px; margin-bottom:4px;}
+  .tagid{font-family:var(--mono); font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; background:var(--bg3); color:var(--ink);}
+  .tagid.r{background:var(--red-bg); color:var(--red);}
+  .it-title{font-weight:700; font-size:16px;}
+  .it-what{color:var(--ink2); font-size:14px; margin:4px 0 10px;}
+  .it-act{font-size:13.5px; padding:9px 12px; background:var(--bg2); border-radius:8px; border-left:3px solid var(--accent); margin:8px 0 12px;}
+  .it-act b{font-weight:600; color:var(--accent);}
+  .links{display:flex; flex-wrap:wrap; gap:6px;}
+  .links a{text-decoration:none; font-size:13px; padding:7px 12px; border-radius:7px; border:1px solid var(--border); color:var(--ink); background:var(--bg); display:inline-flex; align-items:center; gap:6px;}
+  .links a:hover{border-color:var(--accent); color:var(--accent);}
+  .links a.primary{background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600;}
+  .links a.primary:hover{background:#1d4fbf; color:#fff;}
+  .links a .ar{font-family:var(--mono); font-size:11px; color:var(--ink3);}
+  .links a.primary .ar{color:rgba(255,255,255,.8);}
+  .note-honest{margin-top:10px; font-size:12.5px; color:var(--ink2); background:var(--amber-bg); border:1px solid #FBE7C6; border-radius:7px; padding:8px 11px;}
+  .note-honest b{color:var(--amber); font-weight:600;}
+  /* empty in-flight */
+  .empty{font-size:13px; color:var(--ink3); padding:12px 0; font-style:italic;}
+  /* punchlist 3-col */
+  .punch{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+  .pcol{background:var(--bg); border:1px solid var(--border); border-radius:var(--r); padding:14px 16px;}
+  .pcol .ph{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:7px;}
+  .pcol.now .ph{color:var(--green);}
+  .pcol.nxt .ph{color:var(--accent);}
+  .pcol.ltr .ph{color:var(--purple);}
+  .pcol ul{list-style:none; padding:0; margin:0;}
+  .pcol li{font-size:13px; padding:5px 0; border-top:1px solid var(--bg3); color:var(--ink);}
+  .pcol li:first-child{border-top:none;}
+  /* shipped */
+  .ship{background:var(--bg); border:1px solid var(--border); border-radius:var(--r); padding:14px 18px;}
+  .ship ul{list-style:none; padding:0; margin:0;}
+  .ship li{font-size:13.5px; padding:6px 0; border-top:1px solid var(--bg3); display:flex; gap:8px; align-items:baseline;}
+  .ship li:first-child{border-top:none;}
+  .ship .dt{font-family:var(--mono); font-size:11px; color:var(--ink3); min-width:74px;}
+  .foot{text-align:center; color:var(--ink3); font-size:11px; margin-top:30px; font-family:var(--mono);}
+  @media(max-width:700px){.punch{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdrow">
+    <div>
+      <div class="eyebrow">Brightbase · Diagram Engine</div>
+      <h1>Review Hub</h1>
+      <div class="sub">The one place to scan what needs your eyes and what's moving. Chat is just a pointer here.</div>
+    </div>
+    <div class="util">
+      <a href="/Diagram_Engine_Plan.html" target="_blank">Plan doc ↗</a>
+      <a href="/gallery.html" target="_blank">Gallery ↗</a>
+    </div>
+  </div>
+  <div class="meta">Last updated 2026-06-04 · Locked: internal-operated · per-client tokens · editable SVG/HTML · Okta marketing pack first</div>
+
+  <!-- PINNED -->
+  <div class="sec">
+    <div class="sec-h pin"><span class="lbl">⬤ Needs your review</span><span class="ln"></span><span class="ct">1 item</span></div>
+
+    <div class="item pinned">
+      <div class="item-top">
+        <span class="tagid r">R1</span>
+        <span class="it-title">First Okta-style proof + Northwind rebrand demo</span>
+      </div>
+      <div class="it-what">
+        Two of your simpler Okta references recreated as token-driven HTML — <b>"Any source of truth"</b> (cream panel) and <b>"Partner 1/2/3 → Okta"</b> (blue gradient) — then re-rendered in a different client's brand (Northwind, deep emerald). The diagram markup is identical across brands; only the token file is swapped. That swap <em>is</em> the engine.
+      </div>
+      <div class="it-act">
+        <b>Action:</b> Open the gallery. Does the fidelity hit your Okta references? Does the Northwind rebrand feel equally premium? If anything's off, name the diagram + the issue and I'll iterate.
+      </div>
+      <div class="links">
+        <a class="primary" href="/gallery.html" target="_blank">Open gallery <span class="ar">↗</span></a>
+        <a href="/diagrams/any-source-of-truth.html" target="_blank">A · Okta (cream) <span class="ar">↗</span></a>
+        <a href="/diagrams/partners-idp.html" target="_blank">B · Okta (blue) <span class="ar">↗</span></a>
+        <a href="/diagrams/any-source-of-truth.northwind.html" target="_blank">A · Northwind <span class="ar">↗</span></a>
+        <a href="/diagrams/partners-idp.northwind.html" target="_blank">B · Northwind <span class="ar">↗</span></a>
+      </div>
+      <div class="note-honest"><b>Honest note:</b> headless screenshot was being killed in my environment, so I couldn't auto-gate the visuals against your references the way I usually would. Your eyes are the verification step here — flag anything off and I'll fix it before the rest of the proof set goes through.</div>
+    </div>
+  </div>
+
+  <!-- IN FLIGHT -->
+  <div class="sec">
+    <div class="sec-h fl"><span class="lbl">◐ In flight</span><span class="ln"></span><span class="ct">paused on R1</span></div>
+    <div class="empty">Nothing actively building — waiting on your R1 verdict before kicking off the next pass (so we don't widen what isn't right yet).</div>
+  </div>
+
+  <!-- PUNCHLIST -->
+  <div class="sec">
+    <div class="sec-h pl"><span class="lbl">▸ Punchlist</span><span class="ln"></span><span class="ct">phased</span></div>
+    <div class="punch">
+      <div class="pcol now">
+        <div class="ph">Now</div>
+        <ul>
+          <li>R1 review (you)</li>
+          <li>Any pack fixes from your feedback</li>
+        </ul>
+      </div>
+      <div class="pcol nxt">
+        <div class="ph">Next</div>
+        <ul>
+          <li>Recreate the remaining 3 refs — devices, admin tree, Configure Users card</li>
+          <li>Lock the Okta pack v1 once all 5 land cleanly</li>
+          <li>Add 1–2 more demo client brands to stress-test the rebrand</li>
+        </ul>
+      </div>
+      <div class="pcol ltr">
+        <div class="ph">Later</div>
+        <ul>
+          <li>Hightouch pack (P2)</li>
+          <li>Figma-layer export (P3)</li>
+          <li>Operator intake/refine UX (P4)</li>
+          <li>Deploy to diagrams.bbase.ai</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHIPPED -->
+  <div class="sec">
+    <div class="sec-h sh"><span class="lbl">✓ Recently shipped</span><span class="ln"></span><span class="ct">last 24h</span></div>
+    <div class="ship">
+      <ul>
+        <li><span class="dt">2026-05-26</span> Foundational engine: brand-token schema + Okta marketing style pack + 4 rendered diagrams + gallery. One-file rebrand mechanism proven on disk.</li>
+        <li><span class="dt">2026-05-26</span> Direction locked — custom token-driven engine, Okta look first, per-client brand on top of our style packs.</li>
+        <li><span class="dt">2026-05-26</span> Internal QB status board stood up · this review Hub stood up.</li>
+        <li><span class="dt">2026-05-26</span> <a href="/Diagram_Engine_Plan.html" target="_blank" style="color:var(--accent);text-decoration:none;">Planning assessment</a> — Okta + Hightouch teardown, atomic-element kit, engine architecture, phased plan.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot">Brightbase · Diagram Engine · Review Hub · localhost:8848</div>
+</div>
+</body>
+</html>

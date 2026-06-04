@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Any source of truth — Okta</title>
+  <!-- TOKEN FILE (brand). Swap this one line to rebrand. -->
+  <link rel="stylesheet" href="../engine/tokens/okta.css" />
+  <!-- STYLE PACK (shared component library, brand-agnostic). -->
+  <link rel="stylesheet" href="../engine/packs/okta-marketing.css" />
+  <style>
+    /* Page-local layout only — no brand values here.
+       (Layout/structure is identical across brand variants.) */
+    .panel--A {
+      width: 900px;
+      height: 860px;
+      display: flex;
+      flex-direction: column;
+    }
+    .panel--A .headline-row { margin-bottom: 48px; }
+
+    /* left -> right: sources card | connector | hero tile.
+       Vertically centered as a group in the remaining height. */
+    .flow-row {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .flow-row .sources-card {
+      width: 58%;
+      flex: 0 0 58%;
+    }
+    .flow-row .connector-h {
+      flex: 1 1 auto;
+      min-width: 40px;
+      margin: 0 8px 0 28px;
+    }
+    .flow-row .tile--hero { margin-left: 0; }
+  </style>
+</head>
+<body class="diagram-stage">
+
+  <!-- ===== DIAGRAM A — "Any source of truth" (cream) ===== -->
+  <section class="panel panel--cream panel--A">
+
+    <div class="headline-row">
+      <h1 class="panel__headline">Any source of truth</h1>
+    </div>
+
+    <div class="flow-row">
+
+      <!-- Sources container -->
+      <div class="sources-card">
+        <div class="sources-card__head">
+          <span class="checkbox">
+            <!-- Lucide: check -->
+            <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+          </span>
+          <span class="sources-card__label">Out of box integrations</span>
+        </div>
+
+        <div class="pill-stack">
+          <!-- 1. HR Systems — Lucide: file-cog -->
+          <div class="pill">
+            <span class="pill__icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+                <path d="M4 6V4a2 2 0 0 1 2-2h8l6 6v3"/>
+                <path d="M4 22a2 2 0 0 1-2-2"/>
+                <circle cx="6" cy="18" r="3"/>
+                <path d="M6 14v1"/><path d="M6 21v1"/>
+                <path d="m2.6 15.5 .87.5"/><path d="m8.53 19 .87.5"/>
+                <path d="m2.6 20.5 .87-.5"/><path d="m8.53 17 .87-.5"/>
+              </svg>
+            </span>
+            <span class="pill__label">HR Systems</span>
+          </div>
+
+          <!-- 2. Third-party IdPs — Lucide: user-cog -->
+          <div class="pill">
+            <span class="pill__icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="15" r="3"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M10 15H6a4 4 0 0 0-4 4v2"/>
+                <path d="m21.7 16.4-.9-.3"/><path d="m15.2 13.9-.9-.3"/>
+                <path d="m16.6 18.7.3-.9"/><path d="m19.1 12.2.3-.9"/>
+                <path d="m19.6 18.7-.4-1"/><path d="m16.8 12.3-.4-1"/>
+                <path d="m14.3 16.6 1-.4"/><path d="m20.7 13.8 1-.4"/>
+              </svg>
+            </span>
+            <span class="pill__label">Third-party IdPs</span>
+          </div>
+
+          <!-- 3. Active Directory — Lucide: contact -->
+          <div class="pill">
+            <span class="pill__icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 18a4 4 0 0 0-8 0"/>
+                <rect width="18" height="18" x="3" y="4" rx="2"/>
+                <circle cx="12" cy="10" r="2"/>
+                <line x1="8" x2="8" y1="2" y2="4"/>
+                <line x1="16" x2="16" y1="2" y2="4"/>
+              </svg>
+            </span>
+            <span class="pill__label">Active Directory</span>
+          </div>
+
+          <!-- 4. LDAP — Lucide: user-plus -->
+          <div class="pill">
+            <span class="pill__icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <line x1="19" x2="19" y1="8" y2="14"/>
+                <line x1="22" x2="16" y1="11" y2="11"/>
+              </svg>
+            </span>
+            <span class="pill__label">LDAP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connector -> hero -->
+      <div class="connector-h"></div>
+
+      <!-- Hero tile (brand mark via token) -->
+      <div class="tile tile--hero">
+        <span class="hero-mark"></span>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

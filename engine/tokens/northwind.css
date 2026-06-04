@@ -1,0 +1,45 @@
+/* ============================================================
+   NORTHWIND — demo rebrand token file
+   ------------------------------------------------------------
+   Identical schema to okta.css. The diagram markup is byte-for-
+   byte the same; only the linked token file changes. Northwind's
+   identity: deep emerald, warm paper, an "N" monogram in a ring.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Typography */
+  --font-sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Accent (deep emerald) */
+  --accent: #0F766E;
+  --accent-text: #0B5F58;
+  /* Shadow tint follows the accent (pills) */
+  --accent-shadow: rgba(15, 118, 110, 0.22);
+
+  /* Surfaces */
+  --panel-cream: #EFEBE3;          /* warm paper, tinted a touch cooler */
+  --panel-grad-from: #0B5F58;      /* gradient start (bottom-left) */
+  --panel-grad-to:   #34B3A0;      /* gradient end   (top-right)   */
+
+  /* Connectors */
+  --connector-on-cream: #A39E92;
+  --connector-on-blue:  rgba(255, 255, 255, 0.85);
+
+  /* Ink + neutrals */
+  --ink: #1A1A1A;
+  --skeleton: #D8DDD9;
+
+  /* Radii (kept identical to Okta — structure is shared) */
+  --tile-radius:  22px;
+  --pill-radius:  14px;
+  --panel-radius: 28px;
+
+  /* ----------------------------------------------------------
+     Hero mark — Northwind "N" monogram inside a rounded ring.
+     Ring: r 26, stroke accent width 3, hollow. N: polyline in
+     accent, rounded joins. 64 viewBox, centered 32,32.
+     ---------------------------------------------------------- */
+  --hero-logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='26' fill='none' stroke='%230F766E' stroke-width='3'/%3E%3Cpolyline points='22,43 22,21 42,43 42,21' fill='none' stroke='%230F766E' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
