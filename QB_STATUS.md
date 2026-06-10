@@ -49,9 +49,10 @@ Diagram types: architecture · data-flow · integration/network · sequence/auth
 - **P4:** operator intake/refine UX + batch rebrand at scale.
 
 ## In flight
-- (nothing actively building — paused on R1 verdict)
+- (nothing actively building — Studio v1 just landed; paused on R1 + R2 verdicts)
 
 ## Awaiting Loren review
+- **[R2]** Studio v1 — operator UI + parametric render endpoint + sources-hub + partners-hub archetypes. Live: https://diagrams.bbase.ai/studio.html
 - **[R1]** Foundational proof: Ref-1 (cream "Any source of truth") + Ref-3 (blue "Partner→Okta") + Northwind rebrand on both. All 4 diagrams rendered + deployed; gallery + Hub live at https://diagrams.bbase.ai.
   - **Gating gap (be transparent next turn):** headless Chrome screenshot was killed by the env on both attempts (exit 143 / auto-bg killed). Could not visually pre-gate vs the 5 refs. Surfaced this honestly in the Hub note; Loren's eyes are the gate this round.
   - When R1 lands: depending on verdict, either iterate fixes or proceed to remaining refs (devices / admin tree / Configure Users card) to complete the Okta pack v1.
@@ -67,6 +68,8 @@ Diagram types: architecture · data-flow · integration/network · sequence/auth
 - Repo: `bbagent-01/diagrams` → https://github.com/bbagent-01/diagrams
 - **Live: https://diagrams.bbase.ai** (auto-deploys on push to main via GH Action → Cloudflare Pages project `diagrams`; raw subdomain `diagrams-akt.pages.dev`)
 - Hub (Loren-facing): `/index.html` → https://diagrams.bbase.ai/
+- Studio (operator tool): `/studio.html` → https://diagrams.bbase.ai/studio.html
+- Render endpoint: `/render.html` (param-driven; iframed by Studio and embeddable elsewhere)
 - Plan doc: `/Diagram_Engine_Plan.html` → https://diagrams.bbase.ai/Diagram_Engine_Plan.html
 - Gallery: `/gallery.html` → https://diagrams.bbase.ai/gallery.html
 - Gating tooling note: in-harness headless Chrome screenshots fail (SIGTERM). Future option = Playwright via npx, or visit the live URL from a separate gating environment.

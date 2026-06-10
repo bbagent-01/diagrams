@@ -93,6 +93,7 @@
       <div class="sub">The one place to scan what needs your eyes and what's moving. Chat is just a pointer here.</div>
     </div>
     <div class="util">
+      <a href="/studio.html" target="_blank">Studio ↗</a>
       <a href="/Diagram_Engine_Plan.html" target="_blank">Plan doc ↗</a>
       <a href="/gallery.html" target="_blank">Gallery ↗</a>
     </div>
@@ -101,7 +102,25 @@
 
   <!-- PINNED -->
   <div class="sec">
-    <div class="sec-h pin"><span class="lbl">⬤ Needs your review</span><span class="ln"></span><span class="ct">1 item</span></div>
+    <div class="sec-h pin"><span class="lbl">⬤ Needs your review</span><span class="ln"></span><span class="ct">2 items</span></div>
+
+    <div class="item pinned">
+      <div class="item-top">
+        <span class="tagid r">R2</span>
+        <span class="it-title">The Studio — tokens in, diagrams out</span>
+      </div>
+      <div class="it-what">
+        The operator tool. Punch in client brand tokens (name, accent, panel base, glyph, font) and a rough diagram brief (archetype, title, items), and a 2×2 grid of variants renders live as you type. v1 ships with the two archetypes we proved (Sources → Hub, Partners → Hub) × two styles, plus an Okta control for taste-checking.
+      </div>
+      <div class="it-act">
+        <b>Action:</b> Open the Studio. Does the form shape work? Are the right knobs exposed? Anything missing for it to be useful day-one? Try a different client brand (e.g. accent #0F766E, glyph "NW") and watch the variants update.
+      </div>
+      <div class="links">
+        <a class="primary" href="/studio.html" target="_blank">Open Studio <span class="ar">↗</span></a>
+        <a href="/render.html?type=sources-hub&style=cream&accent=%230F766E&glyph=NW&title=Any%20source%20of%20truth&items=HR%20Systems%7CThird-party%20IdPs%7CActive%20Directory%7CLDAP" target="_blank">Sample render <span class="ar">↗</span></a>
+      </div>
+      <div class="note-honest"><b>v1 scope:</b> structured form, not prose. SVG export is v2 (requires the archetypes refactored to pure SVG — separate session). LLM-driven "describe it in plain English" mode layers on after the form UX is dialed.</div>
+    </div>
 
     <div class="item pinned">
       <div class="item-top">
@@ -148,6 +167,7 @@
           <li>Recreate the remaining 3 refs — devices, admin tree, Configure Users card</li>
           <li>Lock the Okta pack v1 once all 5 land cleanly</li>
           <li>Add 1–2 more demo client brands to stress-test the rebrand</li>
+          <li>Studio v2: SVG export, prose-input mode, more archetypes</li>
         </ul>
       </div>
       <div class="pcol ltr">
@@ -155,7 +175,6 @@
         <ul>
           <li>Hightouch pack (P2)</li>
           <li>Figma-layer export (P3)</li>
-          <li>Operator intake/refine UX (P4)</li>
         </ul>
       </div>
     </div>
@@ -166,6 +185,7 @@
     <div class="sec-h sh"><span class="lbl">✓ Recently shipped</span><span class="ln"></span><span class="ct">last 24h</span></div>
     <div class="ship">
       <ul>
+        <li><span class="dt">2026-06-04</span> <b>Studio v1</b> — operator UI for tokens-in / diagrams-out, live 2×2 variant grid, parametric render endpoint. Linked from the nav.</li>
         <li><span class="dt">2026-06-04</span> Deployed to <b>diagrams.bbase.ai</b> — persistent URL (no more local-server flapping). Auto-deploys on every push to main.</li>
         <li><span class="dt">2026-05-26</span> Foundational engine: brand-token schema + Okta marketing style pack + 4 rendered diagrams + gallery. One-file rebrand mechanism proven on disk.</li>
         <li><span class="dt">2026-05-26</span> Direction locked — custom token-driven engine, Okta look first, per-client brand on top of our style packs.</li>
